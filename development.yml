@@ -1,0 +1,37 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+  - dev
+
+pr:
+  - '*'  # Trigger for pull requests (optional)
+
+pool:
+  vmImage: 'ubuntu-latest'  # Choose an appropriate build agent image
+
+variables:
+  SONAR_CLOUD_TOKEN: '7e09ab8ecdc6f8a436a4707b5fd9ea8f4c853185'  # Set your SonarCloud token here
+  MAVEN_OPTS: '-Dmaven.repo.local=$(Build.SourcesDirectory)/.m2/repository'  # Custom Maven repository location
+
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildJob
+        displayName: 'Build and Test'
+        steps:
+          - script: 'mvn clean install -B'  # Build the Maven project and skip interactive mode
+            displayName: 'Build with Maven'
+            workingDirectory: $(System.DefaultWorkingDirectory)
+
+  - stage: SonarCloudAnalysis
+    jobs:
+      - job: SonarCloudJob
+        displayName: 'SonarCloud Analysis'
+        steps:
+          - script: 'mvn sonar:sonar -Dsonar.organization=mgreizis -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$(SONAR_CLOUD_TOKEN) -B'
+            displayName: 'Run SonarCloud Analysis'
+            env:
+              SONAR_CLOUD_TOKEN: $(SONAR_CLOUD_TOKEN)
