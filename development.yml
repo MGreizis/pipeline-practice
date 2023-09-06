@@ -4,11 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger:
-  branches:
-    exclude:
-      - '*'
-  include:
-    - dev  # Replace with your development branch name
+  - dev
 
 pr:
   - '*'  # Trigger for pull requests (optional)
