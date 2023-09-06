@@ -35,3 +35,12 @@ stages:
             displayName: 'Run SonarCloud Analysis'
             env:
               SONAR_CLOUD_TOKEN: $(SONAR_CLOUD_TOKEN)
+
+  - stage: Test
+    jobs:
+      - job: TestJob
+        displayName: 'Run JUnit Tests'
+        steps:
+          - script: 'mvn test'  # Run JUnit tests using Maven
+            displayName: 'Run JUnit Tests'
+            workingDirectory: $(System.DefaultWorkingDirectory)
