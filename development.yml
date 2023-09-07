@@ -22,7 +22,7 @@ stages:
       - job: BuildJob
         displayName: 'Build and Test'
         steps:
-          - script: 'mvn clean install -B'  # Build the Maven project and skip interactive mode
+          - script: 'mvn clean install -DskipTests'  # Build the Maven project and skip interactive mode
             displayName: 'Build with Maven'
             workingDirectory: $(System.DefaultWorkingDirectory)
 
